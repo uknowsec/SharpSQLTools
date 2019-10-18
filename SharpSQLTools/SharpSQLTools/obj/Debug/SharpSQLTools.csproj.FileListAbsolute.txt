@@ -1,0 +1,4 @@
+D:\vscode\c_test\SharpSQLTools\SharpSQLTools\bin\Debug\SharpSQLTools.exe
+D:\vscode\c_test\SharpSQLTools\SharpSQLTools\bin\Debug\SharpSQLTools.pdb
+D:\vscode\c_test\SharpSQLTools\SharpSQLTools\obj\Debug\SharpSQLTools.exe
+D:\vscode\c_test\SharpSQLTools\SharpSQLTools\obj\Debug\SharpSQLTools.pdb
