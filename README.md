@@ -38,3 +38,8 @@ clr_download {url} {path}  - download file from url by clr
 exit                       - terminates the server process (and this session)
 
 ```
+
+
+### References
+
+https://github.com/blackarrowsec/mssqlproxy
