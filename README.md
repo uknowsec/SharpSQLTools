@@ -1,4 +1,5 @@
 
+跟[RcoIl](http://github.com/rcoIl)一起写的小工具，可上传下载文件，xp_cmdshell和clr加载程序集执行相应操作。
 
 ```
 >SharpSQLTools.exe
