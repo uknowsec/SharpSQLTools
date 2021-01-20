@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -28,7 +28,7 @@ namespace SharpSQLTools
                     {
                         if (Flag)
                         {
-                            value += String.Format("{0}\r\n", reader[0].ToString());
+                            value += String.Format("\r\n{0}", reader[0].ToString());
                         }
                         else
                         {
