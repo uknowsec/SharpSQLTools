@@ -370,6 +370,7 @@ exit                       - terminates the server process (and this session)"
                                 setting.Set_permission_set();
                                 setting.CREATE_ASSEMBLY();
                                 setting.CREATE_PROCEDURE();
+                                Console.WriteLine("[+] Install clr done.");
                                 break;
                             }
                         case "uninstall_clr":
@@ -397,6 +398,10 @@ exit                       - terminates the server process (and this session)"
 
         static void Noninteractive(string[] args)
         {
+            if (args.Length < 4) {
+                Help();
+                return;
+            }
             string target = args[0];
             string username = args[1];
             string password = args[2];
@@ -430,11 +435,35 @@ exit                       - terminates the server process (and this session)"
                             setting.Disable_xp_cmdshell();
                             break;
                         case "xp_cmdshell":
-                                xp_shell(args[4]);
-                                break;
+                        {
+                            String command = String.Empty;
+                            if (args.Length > 5)
+                            {
+                                for (int i = 4; i < args.Length; i++) { command += args[i] + " "; }
+                            }
+                            else
+                            {
+                                command = args[4];
+                            }
+                            xp_shell(command);
+                            break;
+                        }
                         case "sp_oacreate":
-                                sp_shell(args[4]);
+                        {
+                            {
+                                String command = String.Empty;
+                                if (args.Length > 5)
+                                {
+                                    for (int i = 4; i < args.Length; i++) { command += args[i] + " "; }
+                                }
+                                else
+                                {
+                                    command = args[4];
+                                }
+                                sp_shell(command);
                                 break;
+                            }
+                        }
                         case "upload":
                             UploadFiles(args[4], args[5]);
                             break;
@@ -475,6 +504,7 @@ exit                       - terminates the server process (and this session)"
                                 setting.Set_permission_set();
                                 setting.CREATE_ASSEMBLY();
                                 setting.CREATE_PROCEDURE();
+                                Console.WriteLine("[+] Install crl successful!");
                                 break;
                             }
                         case "uninstall_clr":
