@@ -93,24 +93,12 @@ exit                       - terminates the server process (and this session)"
                 Console.WriteLine("[!] {0} file does not exist....", outfile);
                 return;
             }
-            Thread.Sleep(3000);
+            Thread.Sleep(5000);
             Console.WriteLine("[+] Reading " + outfile);
             string readstr = String.Format(@"SELECT * FROM OPENROWSET(BULK N'{0}', SINGLE_CLOB) rs", outfile);
-            SqlCommand sqlComm = new SqlCommand(readstr, Conn);
-            //string outreadstr;
-            //接收查询到的sql数据
-            using (SqlDataReader reader = sqlComm.ExecuteReader())
-            {
-                //读取数据 
-                while (reader.Read())
-                {
-                    if (false == reader.IsDBNull(0))
-                    {
-                        Console.WriteLine(String.Format("\n\r{0}", reader[0]));
-                    }
-                }
-            }
+            Console.WriteLine(Batch.RemoteExec(Conn, readstr, true));
             Console.WriteLine("[+] Deleting " + outfile);
+            Thread.Sleep(5000);
             string delstr = String.Format(@"del {0}'", outfile);
             Batch.RemoteExec(Conn, shell + delstr, false);
 
@@ -148,8 +136,7 @@ exit                       - terminates the server process (and this session)"
                 }
             }
             return arrlist;
-        }
-
+         }
 
         /// <summary>
         /// 文件上传，使用 OLE Automation Procedures 的 ADODB.Stream
@@ -169,7 +156,6 @@ exit                       - terminates the server process (and this session)"
             try
             {
                 string hexString = string.Concat(File.ReadAllBytes(localFile).Select(b => b.ToString("X2")));
-
                 ArrayList arrlist = GetSeparateSubString(hexString, 150000);
 
                 foreach (string hex150000 in arrlist)
