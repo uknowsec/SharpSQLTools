@@ -86,6 +86,7 @@ exit                       - terminates the server process (and this session)"
                 return;
             }
             Console.WriteLine("[+] Reading " + outfile);
+            Thread.Sleep(3000);
             string readstr = String.Format(@"SELECT * FROM OPENROWSET(BULK N'{0}', SINGLE_CLOB) rs", outfile);
             SqlCommand sqlComm = new SqlCommand(readstr, Conn);
             //string outreadstr;
