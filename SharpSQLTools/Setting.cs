@@ -16,7 +16,7 @@ namespace SharpSQLTools
         }
 
         /// <summary>
-        /// 判断文件是否存在
+        /// 判断文件是否存在 
         /// </summary>
         /// <param name="path">文件路径</param>
         /// <param name="value">返回值匹配</param>
