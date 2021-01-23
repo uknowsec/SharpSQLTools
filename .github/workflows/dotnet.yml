@@ -1,0 +1,46 @@
+name: "Build SharpSQLTools "
+
+on:
+  push:
+    branches:
+      - master
+      - releases/*
+
+jobs:
+  build:
+    runs-on: windows-2019
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: Build DotNET40
+        run: |
+           cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\"
+           .\MSBuild.exe -p:Configuration=Release $Env:GITHUB_WORKSPACE\
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.2.2
+        with: 
+          # Artifact name
+          name: SharpSQLTools.exe
+          path: D:\a\SharpSQLTools\SharpSQLTools\SharpSQLTools\bin\Release\SharpSQLTools.exe
+      - name: zip_exe
+        shell: powershell
+        run: Compress-Archive -Path D:\a\SharpSQLTools\SharpSQLTools\SharpSQLTools\bin\Release\SharpSQLTools.exe -DestinationPath D:\a\SharpSQLTools\SharpSQLTools\SharpSQLTools\bin\Release\SharpSQLTools.zip    
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: D:\a\SharpSQLTools\SharpSQLTools\SharpSQLTools\bin\Release\SharpSQLTools.zip
+          asset_name: SharpSQLTools.zip
+          asset_content_type: application/zip
