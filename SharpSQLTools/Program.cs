@@ -408,7 +408,7 @@ exit                       - terminates the server process (and this session)"
             try
             {
                 //sql建立连接
-                string connectionString = String.Format("Server = {0};Database = master;User ID = {1};Password = {2};", target, username, password);
+                string connectionString = String.Format("Server = \"{0}\";Database = \"master\";User ID = \"{1}\";Password = \"{2}\";", target, username, password);
                 Conn = new SqlConnection(connectionString);
                 Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
                 Conn.Open();
