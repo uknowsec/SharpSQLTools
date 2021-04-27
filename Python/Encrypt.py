@@ -1,5 +1,5 @@
 #coding:utf-8
-#References:https://github.com/evi1ox/MSSQL_BackDoor/blob/master/tools/py_bin_encrypt/EncodeShellcode.py
+#Author:Evi1oX
 
 import sys
 import base64
@@ -25,6 +25,8 @@ if __name__ == '__main__':
             xorBytes = xor(scBytes, args.key)
             print("XorKey: "+args.key)
             print("Result: "+base64.b64encode(xorBytes).decode())
+            with open("payload.txt","w") as f:
+                f.write(base64.b64encode(xorBytes).decode())
     except Exception as e:
         print(e)
         sys.exit()

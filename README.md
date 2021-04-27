@@ -46,6 +46,8 @@ clr_getav                  - get anti-virus software on this machin by clr
 clr_adduser {user} {pass}  - add user by clr
 clr_download {url} {path}  - download file from url by clr
 clr_scloader {code} {key}  - Encrypt Shellcode by Encrypt.py (only supports x64 shellcode.bin)
+clr_scloader1 {file} {key} - Encrypt Shellcode by Encrypt.py and Upload Payload.txt
+clr_scloader2 {remotefile} - Upload Payload.bin to target before Shellcode Loader
 exit                       - terminates the server process (and this session)
 
 ```
