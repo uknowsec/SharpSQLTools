@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -64,6 +64,10 @@ exit                       - terminates the server process (and this session)"
         /// <param name="Command">命令</param>
         static void xp_shell(String Command)
         {
+            if (setting.Check_configuration("xp_cmdshell", 0) && !setting.Enable_xp_cmdshell())
+            {
+                return;
+            }
             sqlstr = String.Format("exec master..xp_cmdshell '{0}'", Command);
             Console.WriteLine(Batch.RemoteExec(Conn, sqlstr, true));
         }
@@ -83,9 +87,9 @@ exit                       - terminates the server process (and this session)"
         /// <param name="Command">命令</param>
         static void sp_shell(String Command)
         {
-            if (setting.Check_configuration("Ole Automation Procedures", 0))
+            if (setting.Check_configuration("Ole Automation Procedures", 0) && !setting.Enable_ola())
             {
-                if (setting.Enable_ola()) return;
+                return;
             }
             string sqlstr = String.Format(@"
                     declare @shell int,@exec int,@text int,@str varchar(8000); 
@@ -107,29 +111,6 @@ exit                       - terminates the server process (and this session)"
             Batch.CLRExec(Conn, sqlstr);
         }
 
-        /// <summary>
-        ///  把字符串按照指定长度分割
-        /// </summary>
-        /// <param name="txtString">字符串</param>
-        /// <param name="charNumber">长度</param>
-        /// <returns></returns>
-        private static ArrayList GetSeparateSubString(string txtString, int charNumber)
-        {
-            ArrayList arrlist = new ArrayList();
-            string tempStr = txtString;
-            for (int i = 0; i < tempStr.Length; i += charNumber)
-            {
-                if ((tempStr.Length - i) > charNumber)//如果是，就截取
-                {
-                    arrlist.Add(tempStr.Substring(i, charNumber));
-                }
-                else
-                {
-                    arrlist.Add(tempStr.Substring(i));//如果不是，就截取最后剩下的那部分
-                }
-            }
-            return arrlist;
-        }
 
         static byte[] ReadFileToByte(string filePath)
         {
@@ -304,40 +285,14 @@ exit                       - terminates the server process (and this session)"
             Console.WriteLine("[*] '{0}' Download completed", remoteFile);
         }
 
-        public static string result = string.Empty;
-        private static void OnInfoMessage(object mySender, SqlInfoMessageEventArgs args)
+        public static void OnInfoMessage(object mySender, SqlInfoMessageEventArgs args)
         {
-            var value = string.Empty;
+            String value = String.Empty;
             foreach (SqlError err in args.Errors)
             {
-                value += err.Message;
+                value = err.Message;
+                Console.WriteLine(value);
             }
-            result = value;
-            Console.WriteLine(result);
-        }
-
-        /// <summary>
-        /// 数据库连接
-        /// </summary>
-        public static SqlConnection SqlConnet(string target, string dbName, string uName, string passwd, ref string result)
-        {
-            SqlConnection Conn = null;
-            var connectionString = $"Server = \"{target}\";Database = \"{dbName}\";User ID = \"{uName}\";Password = \"{passwd}\";";
-            try
-            {
-                Conn = new SqlConnection(connectionString);
-                Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
-                Conn.Open();
-                result = $"[*] Database connection is successful! {DateTime.Now.ToString()}";
-                Console.WriteLine(result);
-            }
-            catch (Exception ex)
-            {
-                result = $"[!] Error log: {ex.Message}";
-                Console.WriteLine(result);
-                Environment.Exit(0);
-            }
-            return Conn;
         }
 
         static void interactive(string[] args)
@@ -350,8 +305,20 @@ exit                       - terminates the server process (and this session)"
             string username = args[1];
             string password = args[2];
             string database = args[3];
-            string result = "";
-            Conn = SqlConnet(target,database,username,password, ref result);
+            try
+            {
+                //sql建立连接
+                string connectionString = String.Format("Server = \"{0}\";Database = \"{1}\";User ID = \"{2}\";Password = \"{3}\";", target, database, username, password);
+                Conn = new SqlConnection(connectionString);
+                Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
+                Conn.Open();
+                Console.WriteLine("[*] Database connection is successful!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[!] Error log: \r\n" + ex.Message);
+                Environment.Exit(0);
+            }
 
             setting = new Setting(Conn);
 
@@ -472,10 +439,7 @@ exit                       - terminates the server process (and this session)"
                             break;
                         case "install_clr":
                             {
-                                setting.Set_permission_set();
-                                setting.CREATE_ASSEMBLY();
-                                setting.CREATE_PROCEDURE();
-                                Console.WriteLine("[+] Install clr done.");
+                                setting.install_clr();
                                 break;
                             }
                         case "uninstall_clr":
@@ -517,8 +481,20 @@ exit                       - terminates the server process (and this session)"
             string password = args[2];
             string database = args[3];
             string module = args[4];
-            string result = "";
-            Conn = SqlConnet(target, database, username, password, ref result);
+            try
+            {
+                //sql建立连接
+                string connectionString = String.Format("Server = \"{0}\";Database = \"{1}\";User ID = \"{2}\";Password = \"{3}\";", target, database, username, password);
+                Conn = new SqlConnection(connectionString);
+                Conn.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);
+                Conn.Open();
+                Console.WriteLine("[*] Database connection is successful!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[!] Error log: \r\n" + ex.Message);
+                Environment.Exit(0);
+            }
 
             setting = new Setting(Conn);
             try
@@ -647,10 +623,7 @@ exit                       - terminates the server process (and this session)"
                         break;
                     case "install_clr":
                         {
-                            setting.Set_permission_set();
-                            setting.CREATE_ASSEMBLY();
-                            setting.CREATE_PROCEDURE();
-                            Console.WriteLine("[+] Install crl successful!");
+                            setting.install_clr();
                             break;
                         }
                     case "uninstall_clr":
