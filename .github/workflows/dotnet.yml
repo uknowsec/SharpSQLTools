@@ -12,8 +12,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v1
-      - name: Build DotNET40
-        run:  MSBuild.exe /p:Configuration=Release;TargetFrameworkVersion=4.0 $Env:GITHUB_WORKSPACE\SharpSQLTools.sln
+        
+      - name: Setup MSBuild.exe
+        uses: warrenbuckley/Setup-MSBuild@v1
+      - name: MSBuild
+        run: msbuild SharpSQLTools.sln /p:Configuration=Release;TargetFrameworkVersion=4.0
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.2.2
         with: 
