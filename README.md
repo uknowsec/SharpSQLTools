@@ -1,10 +1,26 @@
-### 简介
+- 简介
 
 和[RcoIl](http://github.com/rcoIl)一起写的小工具，可上传下载文件，xp_cmdshell与sp_oacreate双回显和clr加载程序集执行相应操作。功能参考[mssqlproxy](https://github.com/blackarrowsec/mssqlproxy)，由于目前C#还不知如何获取SQL连接的socket，该项目中的mssqlproxy功能目前尚未实现。另外，Clr不适用于一些与线程进程相关的操作。
 
 ##### 编译环境为net 4.0 
 
-### 吹一波[RcoIl](http://github.com/rcoIl)，关注[RcoIl](http://github.com/rcoIl)跟着大佬学C#！！！
+### 更新日志
+
+- 2021-07-10 
+  - 修复上传bug
+  - 修复clr回显bug
+- 2021-06-22
+  - 添加clr执行命令和程序 
+  - 添加clr合并文件功能，方便在cmd被拦截时代替copy /b合并文件 
+  - 修改支持自定义端口 
+- 2021-05-27
+  - 支持shellcode远程加载
+- 2021-01-19
+  - 支持xp_cmdshell与sp_oacreate双回显
+  - 支持clr加载程序集执行
+  - 支持上传下载文件
+- 2019-12-18
+  - 发布最初命令行版
 
 ### Usage
 
