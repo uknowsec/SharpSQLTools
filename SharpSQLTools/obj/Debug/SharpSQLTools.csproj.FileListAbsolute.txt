@@ -1,0 +1,1 @@
+C:\Users\Pentest\Documents\GitHub\SharpSQLTools\SharpSQLTools\bin\Debug\SharpSQLTools.exe.config
