@@ -8,14 +8,29 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v1
-      - name: Build DotNET40
-        run: |
-           cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\"
-           .\MSBuild.exe /p:Configuration=Release;TargetFrameworkVersion=v4.0 $Env:GITHUB_WORKSPACE\
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.202
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-api-key: ${{ secrets.NuGetAPIKey }}
+          nuget-version: '5.x'
+        - name: NuGet restore
+          run: nuget restore
+      - name: Build the solution
+        run: msbuild /p:Configuration=$env:Configuration;TargetFrameworkVersion=4.0
+        env:
+        Configuration: ${{ matrix.configuration }}
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.2.2
         with: 
