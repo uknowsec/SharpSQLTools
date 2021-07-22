@@ -22,7 +22,7 @@ jobs:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.0.2
       - name: Build the solution
-        run: msbuild /p:Configuration=Release;TargetFrameworkVersion=4.0 -restore
+        run: msbuild /p:Configuration=Release;TargetFrameworkVersion=4.0 -restore 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.2.2
         with: 
