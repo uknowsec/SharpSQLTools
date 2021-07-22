@@ -51,7 +51,7 @@ exit                       - terminates the server process (and this session)"
  | (___ | |__   __ _ _ __ _ __| (___ | |  | | |    | | ___   ___ | |___ 
   \___ \| '_ \ / _` | '__| '_ \\___ \| |  | | |    | |/ _ \ / _ \| / __|
   ____) | | | | (_| | |  | |_) |___) | |__| | |____| | (_) | (_) | \__ \
- |_____/|_| |_|\__,_|_|  | .__/_____/ \___\_\______|_|\___/ \___/|_|___/
+ |_____/|_| |_|\__,_|_|  | .__/_____/ \___\_\______|_|\___/ \___/|_|___/    v2.0
                          | |                                            
                          |_|                              
                                                     by Rcoil & Uknow
@@ -203,6 +203,7 @@ exit                       - terminates the server process (and this session)"
                     num2 += num3;
                     num++;
                     text = text + "\"" + text2 + "\"+";
+                    Thread.Sleep(1000);
                     if (setting.File_Exists(text2, 1))
                        {
                            Console.WriteLine("[+] {0}_{1}.config_txt Upload completed", remoteFile, num);

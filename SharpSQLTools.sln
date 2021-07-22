@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSQLTools", "SharpSQLTools\SharpSQLTools.csproj", "{3D20B0BD-086E-4CCF-A956-39A139139FD3}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CLR-module", "CLR-module\CLR-module.sqlproj", "{06AC9954-80E5-47BD-9A80-0119F5656A27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,18 +21,6 @@ Global
 		{3D20B0BD-086E-4CCF-A956-39A139139FD3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3D20B0BD-086E-4CCF-A956-39A139139FD3}.Release|x64.ActiveCfg = Release|Any CPU
 		{3D20B0BD-086E-4CCF-A956-39A139139FD3}.Release|x64.Build.0 = Release|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Debug|x64.Build.0 = Debug|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Debug|x64.Deploy.0 = Debug|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Release|x64.ActiveCfg = Release|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Release|x64.Build.0 = Release|Any CPU
-		{06AC9954-80E5-47BD-9A80-0119F5656A27}.Release|x64.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
