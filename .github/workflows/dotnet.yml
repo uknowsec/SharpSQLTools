@@ -13,7 +13,8 @@ jobs:
       - name: checkout
         uses: actions/checkout@v1
       - name: Build DotNET40
-        run: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe -p:Configuration=Release;TargetFrameworkVersion=v4.0 $Env:GITHUB_WORKSPACE\
+        shell: cmd
+        run: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" -p:Configuration=Release;TargetFrameworkVersion=v4.0 $Env:GITHUB_WORKSPACE\
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.2.2
         with: 
