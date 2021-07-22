@@ -8,21 +8,14 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - name: checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v1
       - name: Build DotNET40
-      - name: Install .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-            dotnet-version: 3.1.202
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.2
-      - name: Build the solution
-        run: msbuild /p:Configuration=Release;TargetFrameworkVersion=4.0 -restore 
+        run: |
+           cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\"
+           .\MSBuild.exe -p:Configuration=Release $Env:GITHUB_WORKSPACE\
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.2.2
         with: 
