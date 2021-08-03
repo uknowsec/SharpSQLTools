@@ -31,6 +31,7 @@ disable_clr                - you know what it means
 install_clr                - create assembly and procedure
 uninstall_clr              - drop clr
 clr_exec {cmd}             - for example: clr_exec whoami;clr_exec -p c:\a.exe;clr_exec -p c:\cmd.exe -a /c whoami
+clr_potato {cmd}           - exec by EfsPotato like clr_exec
 clr_combine {remotefile}   - When the upload module cannot call CMD to perform copy to merge files           
 clr_dumplsass {path}       - dumplsass by clr
 clr_rdp                    - check RDP port and Enable RDP
@@ -51,7 +52,7 @@ exit                       - terminates the server process (and this session)"
  | (___ | |__   __ _ _ __ _ __| (___ | |  | | |    | | ___   ___ | |___ 
   \___ \| '_ \ / _` | '__| '_ \\___ \| |  | | |    | |/ _ \ / _ \| / __|
   ____) | | | | (_| | |  | |_) |___) | |__| | |____| | (_) | (_) | \__ \
- |_____/|_| |_|\__,_|_|  | .__/_____/ \___\_\______|_|\___/ \___/|_|___/    v2.0
+ |_____/|_| |_|\__,_|_|  | .__/_____/ \___\_\______|_|\___/ \___/|_|___/
                          | |                                            
                          |_|                              
                                                     by Rcoil & Uknow
@@ -397,6 +398,13 @@ exit                       - terminates the server process (and this session)"
                                 clr_exec(s);
                                 break;
                             }
+                        case "clr_potato":
+                            {
+                                String s = String.Empty;
+                                for (int i = 0; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
+                                clr_exec(s);
+                                break;
+                            }
                         case "clr_scloader":
                             {
                                 String s = String.Empty;
@@ -575,6 +583,13 @@ exit                       - terminates the server process (and this session)"
                             break;
                         }
                     case "clr_exec":
+                        {
+                            String s = String.Empty;
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
+                            clr_exec(s);
+                            break;
+                        }
+                    case "clr_potato":
                         {
                             String s = String.Empty;
                             for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }

