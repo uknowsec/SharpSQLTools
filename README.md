@@ -6,9 +6,13 @@
 
 ### 更新日志
 
+- 2021-08-04
+  - 添加一些clr实现的基本命令：pwd,ls,netstat,ps等等
+  - 致谢[KevinJClark@csharptoolbox](https://gitlab.com/KevinJClark/csharptoolbox/-/tree/master/WindowsBinaryReplacements) & [rabbittb](https://github.com/rabbittb)
+
 - 2021-08-03
   - 添加clr_potato
-  致谢[zcgonvh@EfsPotato](https://github.com/zcgonvh/EfsPotato) & [hl0rey](https://github.com/hl0rey)
+  - 致谢[zcgonvh@EfsPotato](https://github.com/zcgonvh/EfsPotato) & [hl0rey](https://github.com/hl0rey)
 
 - 2021-07-10 
   - 修复上传bug
@@ -60,6 +64,14 @@ enable_clr                 - you know what it means
 disable_clr                - you know what it means
 install_clr                - create assembly and procedure
 uninstall_clr              - drop clr
+clr_pwd                    - print current directory by clr
+clr_ls {directory}         - list files by clr
+clr_cd {directory}         - change directory by clr
+clr_ps                     - list process by clr
+clr_netstat                - netstat by clr
+clr_ping {host}            - ping by clr
+clr_cat {file}             - view file contents by clr
+clr_rm {file}              - delete file by clr
 clr_exec {cmd}             - for example: clr_exec whoami;clr_exec -p c:\a.exe;clr_exec -p c:\cmd.exe -a /c whoami
 clr_potato {cmd}           - exec by EfsPotato like clr_exec
 clr_combine {remotefile}   - When the upload module cannot call CMD to perform copy to merge files
@@ -342,3 +354,5 @@ https://github.com/GhostPack/SharpDump
 https://gist.github.com/jfmaes/944991c40fb34625cf72fd33df1682c0
 
 https://github.com/zcgonvh/EfsPotato
+
+https://gitlab.com/KevinJClark/csharptoolbox
